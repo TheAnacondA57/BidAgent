@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     llamaparse_api_key: str = ""
 
     embedding_model_name: str = "intfloat/multilingual-e5-large"
+    embedding_dim: int = 1024
 
     litellm_model: str = "anthropic/claude-sonnet-4-6"
     litellm_judge_model: str = "anthropic/claude-sonnet-4-6"
