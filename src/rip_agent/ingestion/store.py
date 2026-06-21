@@ -5,6 +5,7 @@ from typing import Any
 import numpy as np
 
 from rip_agent.config import Settings, get_settings
+from rip_agent.db import default_connection_factory
 from rip_agent.schemas.document import Chunk
 
 _SCHEMA_SQL_TEMPLATE = """
@@ -32,15 +33,6 @@ ON CONFLICT (id) DO NOTHING
 """
 
 
-def _default_connection_factory(dsn: str) -> Callable[[], AbstractContextManager[Any]]:
-    def factory() -> AbstractContextManager[Any]:
-        import psycopg
-
-        return psycopg.connect(dsn)
-
-    return factory
-
-
 class PgVectorStore:
     """Owns the `chunks` table: schema (vector column + generated tsvector for BM25)
     and inserts. `connection_factory` can be injected to test SQL generation without
@@ -53,7 +45,7 @@ class PgVectorStore:
         connection_factory: Callable[[], AbstractContextManager[Any]] | None = None,
     ) -> None:
         self._settings = settings or get_settings()
-        self._connection_factory = connection_factory or _default_connection_factory(
+        self._connection_factory = connection_factory or default_connection_factory(
             self._settings.postgres_dsn
         )
 
