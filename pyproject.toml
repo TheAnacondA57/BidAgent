@@ -12,6 +12,7 @@ dependencies = [
     "llama-parse>=0.5",
     "sentence-transformers>=3.2",
     "litellm>=1.52",
+    "tiktoken>=0.8",
     "psycopg[binary]>=3.2",
     "pgvector>=0.3",
     "numpy>=1.26",

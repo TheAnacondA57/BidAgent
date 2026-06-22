@@ -20,9 +20,11 @@ class Settings(BaseSettings):
     chunk_max_tokens: int = 800
     chunk_overlap_tokens: int = 100
 
-    retrieval_top_k_dense: int = 10
-    retrieval_top_k_bm25: int = 10
+    retrieval_top_k_dense: int = 20
+    retrieval_top_k_bm25: int = 20
     retrieval_rrf_k: int = 60
+
+    generation_context_max_tokens: int = 12000
 
     otel_exporter_endpoint: str = ""
 

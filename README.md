@@ -41,6 +41,8 @@ flowchart LR
 
 Chaque étage (`ingestion`, `retrieval`, `generation`, `evaluation`) émet ses propres spans OpenTelemetry — pas une instrumentation ajoutée après coup.
 
+Le découpage en chunks et la composition du contexte envoyé au LLM utilisent un vrai compteur de tokens (`tiktoken`, `tokenization.py`) plutôt qu'un compte de mots : `chunking.py` borne chaque chunk à `chunk_max_tokens` tokens réels, et `generation/context.py` sélectionne les meilleurs chunks fusionnés jusqu'à `generation_context_max_tokens` avant de construire le prompt.
+
 ## Stack
 
 - **Python 3.12** + **uv** pour la gestion de dépendances/env
