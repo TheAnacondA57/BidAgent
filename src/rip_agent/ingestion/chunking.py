@@ -1,14 +1,12 @@
 import re
 import uuid
+from collections.abc import Callable
 
 from rip_agent.config import Settings, get_settings
 from rip_agent.schemas.document import Chunk, Document
+from rip_agent.tokenization import count_tokens, split_by_tokens
 
 _HEADER_RE = re.compile(r"^(#{1,6})\s+(.*)$", re.MULTILINE)
-
-
-def _count_tokens(text: str) -> int:
-    return len(text.split())
 
 
 def _split_sections(raw_text: str) -> list[tuple[str | None, str]]:
@@ -30,24 +28,17 @@ def _split_sections(raw_text: str) -> list[tuple[str | None, str]]:
     return sections
 
 
-def _split_fixed(text: str, max_tokens: int, overlap_tokens: int) -> list[str]:
-    """Fallback split for an oversized section: fixed-size windows with overlap."""
-    words = text.split()
-    if len(words) <= max_tokens:
-        return [text]
+def chunk_document(
+    document: Document,
+    settings: Settings | None = None,
+    split_fn: Callable[[str, int, int], list[str]] = split_by_tokens,
+    token_counter: Callable[[str], int] = count_tokens,
+) -> list[Chunk]:
+    """Chunk a document by markdown section, falling back to fixed-size token
+    windows with overlap for sections that exceed `chunk_max_tokens`.
 
-    step = max_tokens - overlap_tokens
-    pieces = []
-    for start in range(0, len(words), step):
-        pieces.append(" ".join(words[start : start + max_tokens]))
-        if start + max_tokens >= len(words):
-            break
-    return pieces
-
-
-def chunk_document(document: Document, settings: Settings | None = None) -> list[Chunk]:
-    """Chunk a document by markdown section, falling back to fixed-size windows
-    with overlap for sections that exceed `chunk_max_tokens`.
+    `split_fn`/`token_counter` are injectable so tests can run the section/
+    position logic without a real tiktoken call.
     """
     settings = settings or get_settings()
 
@@ -56,7 +47,7 @@ def chunk_document(document: Document, settings: Settings | None = None) -> list
     for title, body in _split_sections(document.raw_text):
         if not body.strip():
             continue
-        for piece in _split_fixed(body, settings.chunk_max_tokens, settings.chunk_overlap_tokens):
+        for piece in split_fn(body, settings.chunk_max_tokens, settings.chunk_overlap_tokens):
             chunks.append(
                 Chunk(
                     id=str(uuid.uuid4()),
@@ -65,7 +56,7 @@ def chunk_document(document: Document, settings: Settings | None = None) -> list
                     text=piece,
                     section_title=title,
                     position=position,
-                    token_count=_count_tokens(piece),
+                    token_count=token_counter(piece),
                 )
             )
             position += 1

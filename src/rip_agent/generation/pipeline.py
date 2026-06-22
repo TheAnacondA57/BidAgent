@@ -1,6 +1,8 @@
 import re
+from collections.abc import Callable
 
 from rip_agent.config import Settings, get_settings
+from rip_agent.generation.context import select_within_budget
 from rip_agent.generation.llm import LLMClient
 from rip_agent.generation.prompts import REFUSAL_PREFIX, build_answer_prompt
 from rip_agent.schemas.generation import Answer, Citation
@@ -16,13 +18,21 @@ class GenerationPipeline:
     citations + a refusal flag.
     """
 
-    def __init__(self, settings: Settings | None = None, llm_client: LLMClient | None = None) -> None:
+    def __init__(
+        self,
+        settings: Settings | None = None,
+        llm_client: LLMClient | None = None,
+        select_chunks_fn: Callable[[list[RetrievedChunk], int], list[RetrievedChunk]] = select_within_budget,
+    ) -> None:
         self._settings = settings or get_settings()
         self._llm_client = llm_client or LLMClient(self._settings)
+        self._select_chunks = select_chunks_fn
 
     def run(self, question: str, chunks: list[RetrievedChunk]) -> Answer:
         with _tracer.start_as_current_span("generation") as span:
             span.set_attribute("generation.question", question)
+
+            chunks = self._select_chunks(chunks, self._settings.generation_context_max_tokens)
             span.set_attribute("generation.context_chunk_count", len(chunks))
 
             messages = build_answer_prompt(question, chunks)
