@@ -44,7 +44,7 @@ class GenerationPipeline:
         return [
             Citation(
                 chunk_id=chunk_id,
-                source_doc=chunks_by_id[chunk_id].document_id,
+                source_doc=chunks_by_id[chunk_id].document_source_path,
                 source_section=chunks_by_id[chunk_id].section_title,
             )
             for chunk_id in cited_ids

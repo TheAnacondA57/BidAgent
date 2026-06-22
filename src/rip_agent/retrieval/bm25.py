@@ -8,7 +8,7 @@ from rip_agent.retrieval._shared import chunk_from_row
 from rip_agent.schemas.retrieval import RetrievedChunk
 
 _BM25_SQL = """
-SELECT id, document_id, text, section_title, position, token_count,
+SELECT id, document_id, document_source_path, text, section_title, position, token_count,
        ts_rank_cd(text_tsv, websearch_to_tsquery('french', %(question)s)) AS score
 FROM chunks
 WHERE text_tsv @@ websearch_to_tsquery('french', %(question)s)

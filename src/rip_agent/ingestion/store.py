@@ -14,6 +14,7 @@ CREATE EXTENSION IF NOT EXISTS vector;
 CREATE TABLE IF NOT EXISTS chunks (
     id UUID PRIMARY KEY,
     document_id UUID NOT NULL,
+    document_source_path TEXT NOT NULL,
     text TEXT NOT NULL,
     section_title TEXT,
     position INT NOT NULL,
@@ -27,8 +28,8 @@ CREATE INDEX IF NOT EXISTS chunks_text_tsv_idx ON chunks USING gin (text_tsv);
 """
 
 _INSERT_SQL = """
-INSERT INTO chunks (id, document_id, text, section_title, position, token_count, embedding)
-VALUES (%(id)s, %(document_id)s, %(text)s, %(section_title)s, %(position)s, %(token_count)s, %(embedding)s)
+INSERT INTO chunks (id, document_id, document_source_path, text, section_title, position, token_count, embedding)
+VALUES (%(id)s, %(document_id)s, %(document_source_path)s, %(text)s, %(section_title)s, %(position)s, %(token_count)s, %(embedding)s)
 ON CONFLICT (id) DO NOTHING
 """
 
@@ -59,6 +60,7 @@ class PgVectorStore:
             {
                 "id": chunk.id,
                 "document_id": chunk.document_id,
+                "document_source_path": chunk.document_source_path,
                 "text": chunk.text,
                 "section_title": chunk.section_title,
                 "position": chunk.position,

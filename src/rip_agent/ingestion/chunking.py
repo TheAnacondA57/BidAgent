@@ -61,6 +61,7 @@ def chunk_document(document: Document, settings: Settings | None = None) -> list
                 Chunk(
                     id=str(uuid.uuid4()),
                     document_id=document.id,
+                    document_source_path=document.source_path,
                     text=piece,
                     section_title=title,
                     position=position,

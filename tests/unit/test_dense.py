@@ -6,7 +6,7 @@ from rip_agent.config import Settings
 from rip_agent.retrieval.dense import dense_search
 
 _Column = namedtuple("Column", ["name"])
-_COLUMNS = ["id", "document_id", "text", "section_title", "position", "token_count", "score"]
+_COLUMNS = ["id", "document_id", "document_source_path", "text", "section_title", "position", "token_count", "score"]
 
 
 class FakeCursor:
@@ -44,7 +44,7 @@ class FakeConnection:
 
 
 def test_dense_search_maps_rows_to_retrieved_chunks() -> None:
-    fake_conn = FakeConnection(rows=[("c1", "d1", "texte article 1", "Article 1", 0, 3, 0.87)])
+    fake_conn = FakeConnection(rows=[("c1", "d1", "contrat.pdf", "texte article 1", "Article 1", 0, 3, 0.87)])
 
     results = dense_search(
         np.array([0.1, 0.2, 0.3]),
