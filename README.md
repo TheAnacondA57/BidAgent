@@ -72,6 +72,13 @@ Ou tout en conteneur :
 docker compose up --build
 ```
 
+### UI de démo (jetable)
+
+```bash
+uv sync --extra ui
+uv run streamlit run streamlit_app/app.py
+```
+
 ## Tests
 
 ```bash
@@ -97,6 +104,7 @@ src/rip_agent/
   evaluation/          loader, judge, metrics/, runner
   api/                 FastAPI (main, routes, deps)
 scripts/               CLI : run_ingestion.py, run_eval.py
+streamlit_app/         UI de démo jetable (branchée sur RAGPipeline)
 sample_corpus/         Corpus public fictif (clonable, sans données réelles)
 ```
 

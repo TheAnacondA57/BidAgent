@@ -29,6 +29,9 @@ dev = [
     "mypy>=1.13",
     "reportlab>=4.2",
 ]
+ui = [
+    "streamlit>=1.39",
+]
 
 [tool.pytest.ini_options]
 markers = [
