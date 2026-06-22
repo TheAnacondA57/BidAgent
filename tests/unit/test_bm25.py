@@ -4,7 +4,7 @@ from rip_agent.config import Settings
 from rip_agent.retrieval.bm25 import bm25_search
 
 _Column = namedtuple("Column", ["name"])
-_COLUMNS = ["id", "document_id", "text", "section_title", "position", "token_count", "score"]
+_COLUMNS = ["id", "document_id", "document_source_path", "text", "section_title", "position", "token_count", "score"]
 
 
 class FakeCursor:
@@ -42,7 +42,7 @@ class FakeConnection:
 
 
 def test_bm25_search_maps_rows_to_retrieved_chunks() -> None:
-    fake_conn = FakeConnection(rows=[("c1", "d1", "texte article 1", "Article 1", 0, 3, 0.42)])
+    fake_conn = FakeConnection(rows=[("c1", "d1", "contrat.pdf", "texte article 1", "Article 1", 0, 3, 0.42)])
 
     results = bm25_search(
         "durée du contrat",

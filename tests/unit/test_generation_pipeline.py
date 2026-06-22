@@ -5,8 +5,21 @@ from rip_agent.schemas.document import Chunk
 from rip_agent.schemas.retrieval import RetrievedChunk
 
 
-def _retrieved(chunk_id: str, document_id: str = "d1", section_title: str | None = "Article 2") -> RetrievedChunk:
-    chunk = Chunk(id=chunk_id, document_id=document_id, text="texte", section_title=section_title, position=0, token_count=2)
+def _retrieved(
+    chunk_id: str,
+    document_id: str = "d1",
+    document_source_path: str = "contrat.pdf",
+    section_title: str | None = "Article 2",
+) -> RetrievedChunk:
+    chunk = Chunk(
+        id=chunk_id,
+        document_id=document_id,
+        document_source_path=document_source_path,
+        text="texte",
+        section_title=section_title,
+        position=0,
+        token_count=2,
+    )
     return RetrievedChunk(chunk=chunk)
 
 
@@ -24,7 +37,7 @@ def test_run_extracts_citations_from_answer_text() -> None:
     assert answer.text == "Le contrat dure 25 ans [abcdef01]."
     assert len(answer.citations) == 1
     assert answer.citations[0].chunk_id == "abcdef01"
-    assert answer.citations[0].source_doc == "d1"
+    assert answer.citations[0].source_doc == "contrat.pdf"
     assert answer.citations[0].source_section == "Article 2"
 
 

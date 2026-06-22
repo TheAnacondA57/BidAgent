@@ -12,6 +12,7 @@ class Document(BaseModel):
 class Chunk(BaseModel):
     id: str
     document_id: str
+    document_source_path: str = ""
     text: str
     section_title: str | None = None
     position: int

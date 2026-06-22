@@ -14,6 +14,7 @@ def test_chunk_document_splits_by_section() -> None:
 
     assert [c.section_title for c in chunks] == ["Article 1", "Article 2"]
     assert all(c.document_id == "doc-1" for c in chunks)
+    assert all(c.document_source_path == "contrat.pdf" for c in chunks)
     assert [c.position for c in chunks] == [0, 1]
 
 

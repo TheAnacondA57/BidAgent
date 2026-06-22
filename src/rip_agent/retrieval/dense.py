@@ -10,7 +10,7 @@ from rip_agent.retrieval._shared import chunk_from_row
 from rip_agent.schemas.retrieval import RetrievedChunk
 
 _DENSE_SQL = """
-SELECT id, document_id, text, section_title, position, token_count,
+SELECT id, document_id, document_source_path, text, section_title, position, token_count,
        1 - (embedding <=> %(query_embedding)s::vector) AS score
 FROM chunks
 ORDER BY embedding <=> %(query_embedding)s::vector

@@ -51,8 +51,8 @@ def test_insert_chunks_sends_one_row_per_chunk() -> None:
     fake_conn = FakeConnection()
     store = PgVectorStore(settings=Settings(), connection_factory=lambda: fake_conn)
     chunks = [
-        Chunk(id="c1", document_id="d1", text="texte 1", section_title="Article 1", position=0, token_count=2),
-        Chunk(id="c2", document_id="d1", text="texte 2", section_title="Article 1", position=1, token_count=2),
+        Chunk(id="c1", document_id="d1", document_source_path="contrat.pdf", text="texte 1", section_title="Article 1", position=0, token_count=2),
+        Chunk(id="c2", document_id="d1", document_source_path="contrat.pdf", text="texte 2", section_title="Article 1", position=1, token_count=2),
     ]
     embeddings = np.array([[0.1, 0.2], [0.3, 0.4]])
 
@@ -62,5 +62,6 @@ def test_insert_chunks_sends_one_row_per_chunk() -> None:
     _, rows = fake_conn.cursor_calls[0]
     assert len(rows) == 2
     assert rows[0]["id"] == "c1"
+    assert rows[0]["document_source_path"] == "contrat.pdf"
     assert rows[0]["embedding"] == [0.1, 0.2]
     assert rows[1]["embedding"] == [0.3, 0.4]
