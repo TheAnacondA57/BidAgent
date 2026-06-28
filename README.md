@@ -177,10 +177,10 @@ sample_corpus/           Corpus public fictif (clonable, sans données réelles)
 
 ## Baseline d'évaluation
 
-_À renseigner après le premier run d'éval sur un jeu de cas réel._
+Corpus fictif · 5 cas · `eval/cases.jsonl` · modèle `openai/gpt-4o` · retrieval hybride BM25 + dense (RRF).
 
-| Métrique     | Score |
-|--------------|-------|
-| Hit rate     | TBD   |
-| Correctness  | TBD   |
-| Faithfulness | TBD   |
+| Métrique     | Flat (Phase 1) | Tree (Phase 2) |
+|--------------|:--------------:|:--------------:|
+| Hit rate     | 100 %          | 100 %          |
+| Correctness  | 1.00           | 1.00           |
+| Faithfulness | 1.00           | 1.00           |
