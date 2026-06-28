@@ -66,9 +66,8 @@ def test_query_trace_refused_answer_propagated() -> None:
     assert r.json()["answer"]["refused"] is True
 
 
-def test_root_serves_html() -> None:
+def test_health_returns_ok() -> None:
     with TestClient(app) as client:
-        r = client.get("/")
+        r = client.get("/health")
     assert r.status_code == 200
-    assert "text/html" in r.headers["content-type"]
-    assert "RIP-Agent" in r.text
+    assert r.json() == {"status": "ok"}

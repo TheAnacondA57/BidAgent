@@ -78,7 +78,7 @@ def test_tree_bm25_search_queries_doc_nodes_leaf_only() -> None:
     sql, _ = conn.calls[0]
     assert "doc_nodes" in sql
     assert "node_type = 'leaf'" in sql
-    assert "websearch_to_tsquery" in sql
+    assert "to_tsvector" in sql
 
 
 def test_tree_bm25_search_returns_empty_on_no_match() -> None:

@@ -65,4 +65,4 @@ def test_bm25_search_passes_question_and_top_k_as_params() -> None:
 
     sql, params = fake_conn.calls[0]
     assert params == {"question": "durée du contrat", "top_k": 7}
-    assert "websearch_to_tsquery" in sql
+    assert "to_tsvector" in sql
