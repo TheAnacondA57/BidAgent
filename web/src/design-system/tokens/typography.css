@@ -1,0 +1,47 @@
+/* BidAgent — Typography tokens
+   Geist for everything; Geist Mono for data, metrics, code, labels. */
+
+:root {
+  --font-sans: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Type scale (1.25 major-third-ish, tuned for a dark hero) */
+  --text-7xl: 5.5rem;    /* 88px — hero display */
+  --text-6xl: 4.25rem;   /* 68px */
+  --text-5xl: 3.25rem;   /* 52px — section headline */
+  --text-4xl: 2.5rem;    /* 40px */
+  --text-3xl: 2rem;      /* 32px */
+  --text-2xl: 1.5rem;    /* 24px */
+  --text-xl:  1.25rem;   /* 20px */
+  --text-lg:  1.125rem;  /* 18px — lead body */
+  --text-base:1rem;      /* 16px — body */
+  --text-sm:  0.875rem;  /* 14px */
+  --text-xs:  0.75rem;   /* 12px — labels, captions */
+
+  /* Weights */
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semibold:600;
+  --fw-bold:    700;
+
+  /* Line heights */
+  --lh-tight:   1.04;
+  --lh-snug:    1.18;
+  --lh-normal:  1.5;
+  --lh-relaxed: 1.65;
+
+  /* Letter spacing */
+  --ls-tight:   -0.03em;
+  --ls-snug:    -0.015em;
+  --ls-normal:  0;
+  --ls-wide:    0.04em;
+  --ls-eyebrow: 0.16em;
+
+  /* Semantic roles */
+  --type-display:  var(--fw-medium) var(--text-7xl)/var(--lh-tight) var(--font-sans);
+  --type-h1:       var(--fw-medium) var(--text-5xl)/var(--lh-snug) var(--font-sans);
+  --type-h2:       var(--fw-medium) var(--text-3xl)/var(--lh-snug) var(--font-sans);
+  --type-body:     var(--fw-regular) var(--text-base)/var(--lh-normal) var(--font-sans);
+  --type-label:    var(--fw-medium) var(--text-sm)/1.2 var(--font-sans);
+  --type-mono:     var(--fw-regular) var(--text-sm)/1.4 var(--font-mono);
+}

@@ -1,0 +1,68 @@
+/* BidAgent — Color tokens
+   Dark "aurora" system: near-black canvas lit by a warm-amber → cool-blue
+   gradient. Warm = energy/win, Cool = intelligence/trust. */
+
+:root {
+  /* ---- Base canvas (darkest → lightest surfaces) ---- */
+  --bg-void:        #050506;  /* page backdrop, behind everything */
+  --bg-base:        #08090C;  /* default app/page background */
+  --bg-elevated:    #0D0E12;  /* raised section background */
+  --surface-1:      #121319;  /* cards, panels */
+  --surface-2:      #181A22;  /* nested / hovered surface */
+  --surface-3:      #20222C;  /* inputs, controls */
+
+  /* ---- Hairlines & borders (white at low alpha) ---- */
+  --line-faint:     rgba(255,255,255,0.06);
+  --line-soft:      rgba(255,255,255,0.10);
+  --line-strong:    rgba(255,255,255,0.16);
+
+  /* ---- Text ---- */
+  --text-primary:   #F4F5F7;
+  --text-secondary: #AFB2BD;
+  --text-muted:     #71747F;
+  --text-faint:     #4A4C56;
+  --text-inverse:   #08090C;
+
+  /* ---- Brand accents (the aurora) ---- */
+  --warm-100:       #FDE7D2;
+  --warm-300:       #F7B57C;
+  --warm-500:       #F08A3C;   /* primary warm */
+  --warm-600:       #DE742A;
+  --warm-700:       #B65A1C;
+
+  --cool-100:       #D7E4FF;
+  --cool-300:       #8FB3FF;
+  --cool-500:       #3D7BFF;   /* primary cool */
+  --cool-600:       #2C63E0;
+  --cool-700:       #1E47AD;
+
+  /* ---- Semantic ---- */
+  --success-500:    #36C28B;
+  --success-bg:     rgba(54,194,139,0.14);
+  --warning-500:    #F2B33D;
+  --warning-bg:     rgba(242,179,61,0.14);
+  --danger-500:     #F0533C;
+  --danger-bg:      rgba(240,83,60,0.14);
+  --info-500:       #3D7BFF;
+  --info-bg:        rgba(61,123,255,0.14);
+
+  /* ---- Semantic aliases (use these in components) ---- */
+  --accent:             var(--warm-500);
+  --accent-cool:        var(--cool-500);
+  --text-on-accent:     #1A0E03;
+
+  --surface-card:       var(--surface-1);
+  --surface-input:      var(--surface-3);
+  --border-default:     var(--line-soft);
+  --border-hover:       var(--line-strong);
+
+  --focus-ring:         rgba(61,123,255,0.55);
+
+  /* ---- Aurora gradients ---- */
+  --grad-aurora:    linear-gradient(105deg, var(--warm-500) 0%, #C25CFF 48%, var(--cool-500) 100%);
+  --grad-warm-cool: linear-gradient(120deg, var(--warm-500), var(--cool-500));
+  --grad-hero:      radial-gradient(120% 90% at 18% 100%, rgba(240,138,60,0.55) 0%, rgba(240,138,60,0) 55%),
+                    radial-gradient(120% 90% at 82% 100%, rgba(61,123,255,0.55) 0%, rgba(61,123,255,0) 55%),
+                    radial-gradient(80% 60% at 50% 100%, rgba(194,92,255,0.30) 0%, rgba(194,92,255,0) 60%);
+  --grad-surface:   linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0));
+}
