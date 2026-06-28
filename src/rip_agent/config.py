@@ -26,6 +26,8 @@ class Settings(BaseSettings):
 
     generation_context_max_tokens: int = 12000
 
+    use_tree_retrieval: bool = False
+
     otel_exporter_endpoint: str = ""
 
 

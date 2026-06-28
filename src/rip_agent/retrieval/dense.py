@@ -6,7 +6,7 @@ import numpy as np
 
 from rip_agent.config import Settings, get_settings
 from rip_agent.db import default_connection_factory
-from rip_agent.retrieval._shared import chunk_from_row
+from rip_agent.retrieval._shared import chunk_from_row, format_vector, rows_from_cursor
 from rip_agent.schemas.retrieval import RetrievedChunk
 
 _DENSE_SQL = """
@@ -16,11 +16,6 @@ FROM chunks
 ORDER BY embedding <=> %(query_embedding)s::vector
 LIMIT %(top_k)s
 """
-
-
-def _format_vector(embedding: np.ndarray) -> str:
-    """pgvector's text input format, e.g. "[0.1,0.2,0.3]"."""
-    return "[" + ",".join(repr(float(x)) for x in embedding) + "]"
 
 
 def dense_search(
@@ -41,10 +36,9 @@ def dense_search(
         with conn.cursor() as cur:
             cur.execute(
                 _DENSE_SQL,
-                {"query_embedding": _format_vector(query_embedding), "top_k": top_k},
+                {"query_embedding": format_vector(query_embedding), "top_k": top_k},
             )
-            columns = [col.name for col in cur.description]
-            rows = [dict(zip(columns, row, strict=True)) for row in cur.fetchall()]
+            rows = rows_from_cursor(cur)
 
     return [
         RetrievedChunk(chunk=chunk_from_row(row), dense_score=row["score"])
