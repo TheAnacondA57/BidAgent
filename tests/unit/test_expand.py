@@ -100,7 +100,9 @@ def test_fetch_parents_uses_cte_joining_doc_nodes() -> None:
 
 def test_expand_replaces_leaf_with_its_parent() -> None:
     parent = _chunk("parent-1", text="texte agrégé de la section")
-    fake_fetch = lambda leaf_ids, **_: {"leaf-1": parent}
+
+    def fake_fetch(leaf_ids: list[str], **_: object) -> dict:
+        return {"leaf-1": parent}
 
     results = expand_to_parent([_retrieved("leaf-1", fused_score=0.5)], fetch_parents_fn=fake_fetch)
 
@@ -111,7 +113,8 @@ def test_expand_replaces_leaf_with_its_parent() -> None:
 
 
 def test_expand_returns_leaf_unchanged_when_no_parent() -> None:
-    fake_fetch = lambda leaf_ids, **_: {}
+    def fake_fetch(leaf_ids: list[str], **_: object) -> dict:
+        return {}
 
     result = expand_to_parent([_retrieved("leaf-1", fused_score=0.7)], fetch_parents_fn=fake_fetch)
 
@@ -121,7 +124,9 @@ def test_expand_returns_leaf_unchanged_when_no_parent() -> None:
 
 def test_expand_deduplicates_leaves_sharing_same_parent() -> None:
     parent = _chunk("parent-1", text="section complète")
-    fake_fetch = lambda leaf_ids, **_: {"leaf-1": parent, "leaf-2": parent}
+
+    def fake_fetch(leaf_ids: list[str], **_: object) -> dict:
+        return {"leaf-1": parent, "leaf-2": parent}
 
     results = expand_to_parent(
         [_retrieved("leaf-1", fused_score=0.9), _retrieved("leaf-2", fused_score=0.4)],
@@ -135,7 +140,9 @@ def test_expand_deduplicates_leaves_sharing_same_parent() -> None:
 
 def test_expand_keeps_highest_score_when_deduplicating() -> None:
     parent = _chunk("parent-1")
-    fake_fetch = lambda leaf_ids, **_: {"leaf-1": parent, "leaf-2": parent}
+
+    def fake_fetch(leaf_ids: list[str], **_: object) -> dict:
+        return {"leaf-1": parent, "leaf-2": parent}
 
     results = expand_to_parent(
         [_retrieved("leaf-1", fused_score=0.3), _retrieved("leaf-2", fused_score=0.8)],
@@ -148,7 +155,9 @@ def test_expand_keeps_highest_score_when_deduplicating() -> None:
 def test_expand_output_is_sorted_by_fused_score_descending() -> None:
     parent_a = _chunk("parent-a")
     parent_b = _chunk("parent-b")
-    fake_fetch = lambda leaf_ids, **_: {"leaf-1": parent_a, "leaf-2": parent_b}
+
+    def fake_fetch(leaf_ids: list[str], **_: object) -> dict:
+        return {"leaf-1": parent_a, "leaf-2": parent_b}
 
     results = expand_to_parent(
         [_retrieved("leaf-1", fused_score=0.6), _retrieved("leaf-2", fused_score=0.9)],
@@ -161,7 +170,9 @@ def test_expand_output_is_sorted_by_fused_score_descending() -> None:
 
 def test_expand_mixes_expanded_and_non_expanded() -> None:
     parent = _chunk("parent-1")
-    fake_fetch = lambda leaf_ids, **_: {"leaf-1": parent}
+
+    def fake_fetch(leaf_ids: list[str], **_: object) -> dict:
+        return {"leaf-1": parent}
 
     results = expand_to_parent(
         [_retrieved("leaf-1", fused_score=0.8), _retrieved("leaf-2", fused_score=0.5)],
