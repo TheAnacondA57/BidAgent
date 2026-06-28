@@ -4,6 +4,7 @@ from rip_agent.evaluation.metrics.correctness import compute_correctness
 from rip_agent.evaluation.metrics.faithfulness import compute_faithfulness
 from rip_agent.evaluation.metrics.hit_rate import aggregate_hit_rate, compute_hit
 from rip_agent.generation.pipeline import GenerationPipeline
+from rip_agent.retrieval._shared import RetrievalPipelineProtocol
 from rip_agent.retrieval.pipeline import RetrievalPipeline
 from rip_agent.schemas.evaluation import EvalCase, EvalReport, EvalResult
 from rip_agent.schemas.retrieval import RetrievalQuery
@@ -24,12 +25,18 @@ class EvalRunner:
     def __init__(
         self,
         settings: Settings | None = None,
-        retrieval_pipeline: RetrievalPipeline | None = None,
+        retrieval_pipeline: RetrievalPipelineProtocol | None = None,
         generation_pipeline: GenerationPipeline | None = None,
         judge: JudgeClient | None = None,
     ) -> None:
         self._settings = settings or get_settings()
-        self._retrieval_pipeline = retrieval_pipeline or RetrievalPipeline(self._settings)
+        if retrieval_pipeline is not None:
+            self._retrieval_pipeline = retrieval_pipeline
+        elif self._settings.use_tree_retrieval:
+            from rip_agent.retrieval.tree_pipeline import TreeRetrievalPipeline
+            self._retrieval_pipeline = TreeRetrievalPipeline(self._settings)
+        else:
+            self._retrieval_pipeline = RetrievalPipeline(self._settings)
         self._generation_pipeline = generation_pipeline or GenerationPipeline(self._settings)
         self._judge = judge or JudgeClient(self._settings)
 
