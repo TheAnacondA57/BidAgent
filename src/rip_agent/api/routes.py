@@ -30,22 +30,22 @@ def query_with_trace(
         answer = rag_pipeline.answer(request.question)
 
     raw_spans = get_spans_for_trace(trace_id)
-    t_origin = min((s.start_time for s in raw_spans), default=0)
+    t_origin = min((s.start_time or 0 for s in raw_spans), default=0)
 
     spans = [
         SpanData(
             name=s.name,
             span_id=format_span_id(s.context.span_id),
             parent_span_id=format_span_id(s.parent.span_id) if s.parent else None,
-            start_ms=(s.start_time - t_origin) / 1_000_000,
-            duration_ms=(s.end_time - s.start_time) / 1_000_000,
+            start_ms=((s.start_time or 0) - t_origin) / 1_000_000,
+            duration_ms=((s.end_time or 0) - (s.start_time or 0)) / 1_000_000,
             attributes={
                 k: v
                 for k, v in (s.attributes or {}).items()
                 if isinstance(v, (str, int, float, bool))
             },
         )
-        for s in sorted(raw_spans, key=lambda x: x.start_time)
+        for s in sorted(raw_spans, key=lambda x: x.start_time or 0)
     ]
 
     total_ms = next(
