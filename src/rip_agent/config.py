@@ -13,9 +13,9 @@ class Settings(BaseSettings):
     embedding_model_name: str = "intfloat/multilingual-e5-large"
     embedding_dim: int = 1024
 
-    litellm_model: str = "anthropic/claude-sonnet-4-6"
-    litellm_judge_model: str = "anthropic/claude-sonnet-4-6"
-    anthropic_api_key: str = ""
+    litellm_model: str = "openai/gpt-4o"
+    litellm_judge_model: str = "openai/gpt-4o"
+    openai_api_key: str = ""
 
     chunk_max_tokens: int = 800
     chunk_overlap_tokens: int = 100

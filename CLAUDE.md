@@ -97,6 +97,37 @@ Toutes les dépendances lourdes ou I/O sont injectables :
 ### Nommage
 `test_<ce_que_ça_fait>_<dans_quelle_condition>` — lisible sans connaître le code.
 
+## Workflow Git
+
+Toute modification suit le flux : **issue GitHub → branche → PR → merge main**.
+
+```bash
+# 1. Créer l'issue (décrit le QUOI et le POURQUOI)
+gh issue create --title "..." --body "..."
+
+# 2. Créer la branche depuis main (nommée d'après l'issue)
+git checkout main && git pull
+git checkout -b feat/<sujet>          # ou fix/ refactor/ test/ docs/
+
+# 3. Développer, committer (messages en anglais, impératif)
+git add <fichiers ciblés>             # jamais git add -A
+git commit -m "feat(scope): description courte"
+
+# 4. Pousser et ouvrir la PR en référençant l'issue
+git push -u origin feat/<sujet>
+gh pr create --title "..." --body "Closes #<n>"
+
+# 5. Merger (squash ou merge commit selon la taille)
+gh pr merge --merge               # ou --squash pour les petits fix
+git checkout main && git pull
+```
+
+**Règles :**
+- Un commit par unité logique — pas de "wip" ou "fix fix fix".
+- Toujours cibler des fichiers précis dans `git add`, jamais `.` ou `-A`.
+- La PR ferme l'issue avec `Closes #n` dans le body.
+- Jamais de push direct sur `main`.
+
 ## Commandes utiles
 
 ```bash
