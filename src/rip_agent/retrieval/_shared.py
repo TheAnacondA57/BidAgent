@@ -8,8 +8,8 @@ from rip_agent.schemas.retrieval import RetrievalQuery, RetrievedChunk
 
 def chunk_from_row(row: dict[str, Any]) -> Chunk:
     return Chunk(
-        id=row["id"],
-        document_id=row["document_id"],
+        id=str(row["id"]),
+        document_id=str(row["document_id"]),
         document_source_path=row["document_source_path"],
         text=row["text"],
         section_title=row["section_title"],

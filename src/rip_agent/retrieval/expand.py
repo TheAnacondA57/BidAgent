@@ -39,7 +39,7 @@ def fetch_parents(
             cur.execute(_FETCH_PARENTS_SQL, {"leaf_ids": leaf_ids})
             rows = rows_from_cursor(cur)
 
-    return {row["leaf_id"]: chunk_from_row(row) for row in rows}
+    return {str(row["leaf_id"]): chunk_from_row(row) for row in rows}
 
 
 def expand_to_parent(
