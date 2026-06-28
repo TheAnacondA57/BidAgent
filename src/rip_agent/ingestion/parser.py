@@ -14,9 +14,24 @@ class PdfParserClient(Protocol):
     def load_data(self, file_path: str) -> list[ParsedPage]: ...
 
 
-def _build_client(settings: Settings) -> PdfParserClient:
-    from llama_parse import LlamaParse
+class _PyPdfClient:
+    """Local fallback parser using pypdf — no API key, no network."""
 
+    def load_data(self, file_path: str) -> list[ParsedPage]:
+        from pypdf import PdfReader
+
+        class _Page:
+            def __init__(self, text: str) -> None:
+                self.text = text
+
+        reader = PdfReader(file_path)
+        return [_Page(page.extract_text() or "") for page in reader.pages]
+
+
+def _build_client(settings: Settings) -> PdfParserClient:
+    if not settings.llamaparse_api_key:
+        return _PyPdfClient()
+    from llama_parse import LlamaParse
     return LlamaParse(api_key=settings.llamaparse_api_key, result_type="markdown")
 
 
